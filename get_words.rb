@@ -16,6 +16,8 @@ key_word_set = []
 id_set = []
 str_set = []
 op_set = []
+comma_set = []
+parent_set = []
 
 File.open("test.c").each do |line|
   line.scan(word).each{|w| puts w}
