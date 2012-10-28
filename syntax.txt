@@ -1,0 +1,61 @@
+[非终结符]
+S' S  X D ASSIGN FLOOP JUDGE FUNC TYPE EQ EQS VALUE VLIST EXP EXP1 F IDS
+LOGIC JUDGE 
+[终结符]
+int float , # [ ] ( ) [ ] { } main DIGIT REAL STRING for if else + - * / = > < == != >= <= ++ ID return 
+[文法起始符]
+S'
+[生成式]
+S' -> S;
+S -> int main ( ) { X return DIGIT # };
+X -> D #;
+X -> D # X;
+X -> FUNC #;
+X -> FUNC # X;
+X -> ASSIGN #;
+X -> ASSIGN # X;
+X -> FLOOP;
+X -> FLOOP X;
+X -> JUDGE;
+X -> JUDGE X;
+D ->  TYPE IDS ;
+IDS -> ID;
+IDS -> ID , IDS;
+IDS -> ID EQ;
+IDS -> ID EQ , IDS;
+IDS -> ID [ DIGIT ];
+IDS -> ID [ DIGIT ] , IDS;
+IDS -> ID [ DIGIT ] EQS;
+IDS -> ID [ DIGIT ] EQS , IDS;
+EQ ->  = VALUE ;
+EQS -> = { VLIST } ;
+VLIST ->  VALUE;
+VLIST ->  VALUE , VLIST ;
+VALUE -> DIGIT;
+VALUE -> REAL;
+VALUE -> STRING; 
+VALUE -> ID;
+VALUE -> ID [ DIGIT ];
+VALUE -> ID [ ID ];
+TYPE -> int;
+TYPE -> float;
+FUNC -> ID ( VLIST ) ;
+ASSIGN -> ID = EXP ;
+EXP -> EXP + EXP1;
+EXP -> EXP - EXP1;
+EXP -> EXP1;
+EXP1 -> EXP1 * F;
+EXP1 -> EXP1 / F;
+EXP1 -> F;
+F -> ( EXP );
+F -> VALUE;
+FLOOP -> for ( ASSIGN # LOGIC # ID ++ ) { X };
+LOGIC -> VALUE > VALUE;
+LOGIC -> VALUE >= VALUE;
+LOGIC -> VALUE == VALUE;
+LOGIC -> VALUE <= VALUE;
+LOGIC -> VALUE < VALUE;
+LOGIC -> VALUE != VALUE;
+JUDGE -> if ( LOGIC ) { X };
+JUDGE -> if ( LOGIC ) { X } else { X };
+

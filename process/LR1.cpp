@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stack>
 #include <cstdio>
+#include <sstream>
 
 LR1::LR1() {
 }
@@ -145,16 +146,16 @@ void LR1::get_LR1() {
     start.insert(LR1_State("S0", vec, 0, "?"));
 
     set<LR1_State> st = closure(start);
-
-    for (set<LR1_State>::iterator it = st.begin(); it != st.end(); ++it) {
-        cout << it->x << "->";
-        for (int i = 0; i < it->y.size(); ++i) {
-            if (it->pos == i) cout << ".";
-            cout << it->y[i];
-        }
-        if (it->pos == it->y.size()) cout << ".";
-        cout << "  " << it->flag << endl;
-    }
+    /*
+     for (set<LR1_State>::iterator it = st.begin(); it != st.end(); ++it) {
+         cout << it->x << "->";
+         for (int i = 0; i < it->y.size(); ++i) {
+             if (it->pos == i) cout << ".";
+             cout << it->y[i];
+         }
+         if (it->pos == it->y.size()) cout << ".";
+         cout << "  " << it->flag << endl;
+     }*/
 
     set_v_t_dic();
     for (int i = 0; i < LR1_const::MAXN; ++i) {
@@ -201,38 +202,39 @@ void LR1::get_LR1() {
                         break;
                     }
                 }
-                
-                
+
+
                 mat[r][v_t_dic[it->flag]] = make_pair("r", id);
             }
 
             if (it ->x == "S0" && it->pos == 1 && it->y.size() == 2 && it->y[0] == "S" && it->y[1] == "$") {
-                mat[r][v_t_dic["$"]] = make_pair("AC",0);
+                mat[r][v_t_dic["$"]] = make_pair("AC", 0);
             }
         }
     }
 
     for (map<set<LR1_State>, int>::iterator i = LR1_dic.begin(); i != LR1_dic.end(); ++i) {
-        cout << "-------------------------------------" << endl;
+        cout << endl;
         const set<LR1_State>& lr_set = i->first;
         for (set<LR1_State>::iterator it = lr_set.begin(); it != lr_set.end(); ++it) {
             cout << it->x << "->";
             for (int i = 0; i < it->y.size(); ++i) {
                 if (it->pos == i) cout << ".";
-                cout << it->y[i];
+                cout << it->y[i] << " ";
             }
             if (it->pos == it->y.size()) cout << ".";
             cout << "  " << it->flag << endl;
         }
-        cout << "-------------------------------------" << endl;
+        cout << endl;
     }
-    
-    for (int i = 1; i <= rows; ++i){
-        for (int j = 1; j <= cols; ++j){
-            printf("%s%02d ", mat[i][j].first.c_str() ,mat[i][j].second);
+    /*
+    for (int i = 1; i <= rows; ++i) {
+        for (int j = 1; j <= cols; ++j) {
+            printf("  %s%02d  ", mat[i][j].first.c_str(), mat[i][j].second);
         }
         puts("");
     }
+     */
 }
 
 void LR1::print_first() {
@@ -257,7 +259,40 @@ void LR1::set_ps(vector<pair<string, vector<string> > >& _ps) {
     ps = _ps;
 }
 
+void LR1::add_p(string x) {
+    string name;
+    istringstream in1(x);
+    in1 >> name;
+    vector<string> tmp;
+    string str;
+    in1 >> str;
+    //if(str != "->") cout << "!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    while (in1 >> str) {
+        tmp.push_back(str);
+    }
+    ps.push_back(make_pair(name, tmp));
+}
+
+void LR1::add_t(string x) {
+    string name;
+    istringstream in1(x);
+    string str;
+    while (in1 >> str) {
+        ts.insert(str);
+    }
+}
+
+void LR1::add_v(string x) {
+    string name;
+    istringstream in1(x);
+    string str;
+    while (in1 >> str) {
+        vs.insert(str);
+    }
+}
+
 void LR1::test() {
+    /*
     set<string> _ts;
     _ts.insert("x");
     _ts.insert("*");
@@ -295,13 +330,42 @@ void LR1::test() {
     tmp.push_back("*");
     tmp.push_back("E");
     _ps.push_back(make_pair("V", tmp));
+     this->set_ps(_ps);
+
+    this->add_p("S1", "S $");
+    this->add_p("S", "V = E");
+    this->add_p("S", "E");
+    this->add_p("E", "V");
+    this->add_p("V", "x");
+    this->add_p("V", "* E");
 
     this->set_ts(_ts);
-    this->set_ps(_ps);
-    this->set_vs(_vs);
 
+    this->set_vs(_vs);
+     */
+    
+    this->add_v("S0 S  X D ASSIGN FLOOP JUDGE FUNC TYPE EQ EQS VALUE VLIST EXP EXP1 F IDS LOGIC JUDGE ");
+    this->add_t("int float , # [ ] ( ) [ ] { } main DIGIT REAL STRING for if else + - * / = > < == != >= <= ++ ID return");
+    freopen("syntax", "r", stdin);
+    string str;
+    while (getline (cin, str)){
+        //cout << str << endl;
+        this->add_p(str);
+    }
+
+      /*
+    this->add_t("* i =");
+    this->add_v("S0 S L R");
+    this->add_p("S0 -> S $");
+    this->add_p("S -> L = R");
+    this->add_p("S -> R");
+    this->add_p("L -> * R");
+    this->add_p("L -> i");
+    this->add_p("R -> L");
+    */
     this->get_first();
-    this->print_first();
+    //this->print_first();
 
     this->get_LR1();
+    cout << rows << endl;
 }

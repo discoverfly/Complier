@@ -1,0 +1,25 @@
+int main ( ) {
+	int ID [ DIGIT ] = { DIGIT , DIGIT , DIGIT , DIGIT , DIGIT , DIGIT } #
+	int ID [ DIGIT ] = { DIGIT , DIGIT , DIGIT , DIGIT , DIGIT , DIGIT } #
+	int ID #
+	float ID , ID #
+    int ID #
+	float ID #
+	ID ( STRING ) #
+	ID ( STRING , STRING ) #
+	ID = DIGIT #
+	ID = DIGIT #
+	for ( ID = DIGIT # ID < DIGIT # ID ++ ) {
+		ID = ID + ID [ DIGIT ] * ID [ DIGIT ] #
+		ID = ID + ID [ DIGIT ] #
+	}
+	ID = ID / ID #
+	if ( ID >= DIGIT ) {
+		ID = ID - DIGIT #
+		ID ( STRING , DIGIT , REAL ) #
+	} else {
+		ID = DIGIT - ID #
+		ID ( STRING , DIGIT , REAL ) # 
+	}
+	return DIGIT #
+}

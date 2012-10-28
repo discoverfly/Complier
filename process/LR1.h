@@ -56,7 +56,9 @@ public:
     void get_first();
     void print_first();
     void get_LR1();
-    
+    void add_p(string x);
+    void add_t(string x);
+    void add_v(string x);
 private:
     
     void set_v_t_dic();
