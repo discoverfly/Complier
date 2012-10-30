@@ -36,7 +36,7 @@ public:
         if (flag != a.flag) return flag < a.flag;
         return y < a.y;
     }
-    
+
 };
 
 namespace LR1_const {
@@ -59,8 +59,13 @@ public:
     void add_p(string x);
     void add_t(string x);
     void add_v(string x);
+    void print_mat();
+    void print_LR1_state();
+    const pair<string, vector<string> > get_p_by_id(int id);
+    void read();
+    pair<string,int> next_action(int cur, string add);
 private:
-    
+
     void set_v_t_dic();
     set<LR1_State> closure(set<LR1_State> & I);
     set<LR1_State> go(const set<LR1_State> & I, string flag);
@@ -73,7 +78,8 @@ private:
     int rows, cols;
     map<string, int> v_t_dic;
     map<set<LR1_State>, int> LR1_dic;
-    pair<string,int> mat[LR1_const::MAXN][LR1_const::MAXN];
+    vector<set<LR1_State> > LR1_vec;
+    pair<string, int> mat[LR1_const::MAXN][LR1_const::MAXN];
 
     set<string> ts;
     set<string> vs;

@@ -4,12 +4,15 @@
     <logicalFolder name="HeaderFiles" displayName="头文件" projectFiles="true">
     </logicalFolder>
     <logicalFolder name="SourceFiles" displayName="源文件" projectFiles="true">
+      <itemPath>Generator.cpp</itemPath>
+      <itemPath>Generator.h</itemPath>
       <itemPath>LR1.cpp</itemPath>
       <itemPath>LR1.h</itemPath>
       <itemPath>main.cpp</itemPath>
-      <itemPath>syntax</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles" displayName="资源文件" projectFiles="true">
+      <itemPath>syntax</itemPath>
+      <itemPath>words</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="测试文件"

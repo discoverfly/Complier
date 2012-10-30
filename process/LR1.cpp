@@ -137,36 +137,27 @@ void LR1::set_v_t_dic() {
 }
 
 void LR1::get_LR1() {
-    nulls.insert("$");
+    //nulls.insert("$");
     first["$"].insert("$");
     vector<string> vec;
     vec.push_back("S");
-    vec.push_back("$");
     set<LR1_State> start;
-    start.insert(LR1_State("S0", vec, 0, "?"));
+    start.insert(LR1_State("S0", vec, 0, "$"));
 
     set<LR1_State> st = closure(start);
-    /*
-     for (set<LR1_State>::iterator it = st.begin(); it != st.end(); ++it) {
-         cout << it->x << "->";
-         for (int i = 0; i < it->y.size(); ++i) {
-             if (it->pos == i) cout << ".";
-             cout << it->y[i];
-         }
-         if (it->pos == it->y.size()) cout << ".";
-         cout << "  " << it->flag << endl;
-     }*/
 
     set_v_t_dic();
     for (int i = 0; i < LR1_const::MAXN; ++i) {
         for (int j = 0; j < LR1_const::MAXN; ++j) {
-            mat[i][j] = make_pair(" ", -1);
+            mat[i][j] = make_pair("", -1);
         }
     }
 
     rows = 0;
+    LR1_vec.clear();
+    LR1_dic.clear();
     LR1_dic[st] = ++rows;
-
+    LR1_vec.push_back(st);
     bool changed = false;
     do {
         changed = false;
@@ -177,6 +168,7 @@ void LR1::get_LR1() {
                     set<LR1_State> new_state = go(it->first, i->y[i->pos]);
                     if (LR1_dic.find(new_state) == LR1_dic.end()) {
                         changed = true;
+                        LR1_vec.push_back(new_state);
                         LR1_dic[new_state] = ++rows;
                     }
 
@@ -202,20 +194,40 @@ void LR1::get_LR1() {
                         break;
                     }
                 }
-
-
                 mat[r][v_t_dic[it->flag]] = make_pair("r", id);
             }
 
-            if (it ->x == "S0" && it->pos == 1 && it->y.size() == 2 && it->y[0] == "S" && it->y[1] == "$") {
+            if (it ->x == "S0" && it->pos == 1 && it->y.size() == 1 && it->y[0] == "S") {
                 mat[r][v_t_dic["$"]] = make_pair("AC", 0);
             }
         }
     }
+}
 
-    for (map<set<LR1_State>, int>::iterator i = LR1_dic.begin(); i != LR1_dic.end(); ++i) {
+void LR1::print_mat() {
+    printf("   ");
+    for (set<string>::iterator i = ts.begin(); i != ts.end(); ++i) {
+        printf(" %4s ", (*i).c_str());
+    }
+    for (set<string>::iterator i = vs.begin(); i != vs.end(); ++i) {
+        printf(" %4s ", (*i).c_str());
+    }
+    printf(" %4s \n", "$");
+    for (int i = 1; i <= rows; ++i) {
+        printf("%2d :", i);
+        for (int j = 1; j <= cols; ++j) {
+            if (mat[i][j].second != -1)
+                printf(" %2s%02d ", mat[i][j].first.c_str(), mat[i][j].second);
+            else printf(" %4s ", "");
+        }
+        puts("");
+    }
+}
+
+void LR1::print_LR1_state() {
+    for (int i = 0; i < LR1_vec.size(); ++i) {
         cout << endl;
-        const set<LR1_State>& lr_set = i->first;
+        set<LR1_State>& lr_set = LR1_vec[i];
         for (set<LR1_State>::iterator it = lr_set.begin(); it != lr_set.end(); ++it) {
             cout << it->x << "->";
             for (int i = 0; i < it->y.size(); ++i) {
@@ -227,14 +239,6 @@ void LR1::get_LR1() {
         }
         cout << endl;
     }
-    /*
-    for (int i = 1; i <= rows; ++i) {
-        for (int j = 1; j <= cols; ++j) {
-            printf("  %s%02d  ", mat[i][j].first.c_str(), mat[i][j].second);
-        }
-        puts("");
-    }
-     */
 }
 
 void LR1::print_first() {
@@ -291,81 +295,43 @@ void LR1::add_v(string x) {
     }
 }
 
-void LR1::test() {
-    /*
-    set<string> _ts;
-    _ts.insert("x");
-    _ts.insert("*");
-    _ts.insert("=");
-
-    set<string> _vs;
-    _vs.insert("S");
-    _vs.insert("E");
-    _vs.insert("V");
-    _vs.insert("S0");
-
-    vector<pair<string, vector<string> > > _ps;
-    vector<string> tmp;
-
-    tmp.clear();
-    tmp.push_back("V");
-    tmp.push_back("=");
-    tmp.push_back("E");
-    _ps.push_back(make_pair("S", tmp));
-
-    tmp.clear();
-    tmp.push_back("E");
-    _ps.push_back(make_pair("S", tmp));
-
-    tmp.clear();
-    tmp.push_back("V");
-    _ps.push_back(make_pair("E", tmp));
-
-    tmp.clear();
-    tmp.push_back("x");
-    _ps.push_back(make_pair("V", tmp));
-
-
-    tmp.clear();
-    tmp.push_back("*");
-    tmp.push_back("E");
-    _ps.push_back(make_pair("V", tmp));
-     this->set_ps(_ps);
-
-    this->add_p("S1", "S $");
-    this->add_p("S", "V = E");
-    this->add_p("S", "E");
-    this->add_p("E", "V");
-    this->add_p("V", "x");
-    this->add_p("V", "* E");
-
-    this->set_ts(_ts);
-
-    this->set_vs(_vs);
-     */
-    
-    this->add_v("S0 S  X D ASSIGN FLOOP JUDGE FUNC TYPE EQ EQS VALUE VLIST EXP EXP1 F IDS LOGIC JUDGE ");
+void LR1::read() {
+    this->add_v("S0 S X D ASSIGN FLOOP JUDGE FUNC TYPE EQ EQS VALUE VLIST EXP EXP1 F IDS LOGIC JUDGE ");
     this->add_t("int float , # [ ] ( ) [ ] { } main DIGIT REAL STRING for if else + - * / = > < == != >= <= ++ ID return");
     freopen("syntax", "r", stdin);
-    string str;
-    while (getline (cin, str)){
+    char buf[1000];
+    while (gets(buf) != NULL) {
         //cout << str << endl;
-        this->add_p(str);
+        this->add_p(string(buf));
     }
+    fclose(stdin);
+    //
+    //    this->add_t("c d");
+    //    this->add_v("S0 S C");
+    //    this->add_p("S0 -> S");
+    //    this->add_p("S -> C C");
+    //    this->add_p("C -> c C");
+    //    this->add_p("C -> d");
+}
 
-      /*
-    this->add_t("* i =");
-    this->add_v("S0 S L R");
-    this->add_p("S0 -> S $");
-    this->add_p("S -> L = R");
-    this->add_p("S -> R");
-    this->add_p("L -> * R");
-    this->add_p("L -> i");
-    this->add_p("R -> L");
-    */
+pair<string, int> LR1::next_action(int cur, string add) {
+    if (v_t_dic.find(add) != v_t_dic.end()) {
+        return mat[cur][v_t_dic[add]];
+    } else {
+        return make_pair("", -1);
+    }
+}
+
+void LR1::test() {
+    this->read();
     this->get_first();
     //this->print_first();
-
     this->get_LR1();
+    this->print_LR1_state();
+    //this->print_mat();
     cout << rows << endl;
+}
+
+const pair<string, vector<string> > LR1::get_p_by_id(int id) {
+    return ps[id];
 }

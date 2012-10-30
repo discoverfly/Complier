@@ -1,4 +1,4 @@
-S0 -> S $
+S0 -> S
 S -> int main ( ) { X return DIGIT # }
 X -> D #
 X -> D # X
@@ -40,7 +40,7 @@ EXP1 -> EXP1 * F
 EXP1 -> EXP1 / F
 EXP1 -> F
 F -> ( EXP )
-F -> VALUE;
+F -> VALUE
 FLOOP -> for ( ASSIGN # LOGIC # ID ++ ) { X }
 LOGIC -> VALUE > VALUE
 LOGIC -> VALUE >= VALUE
