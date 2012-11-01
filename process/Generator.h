@@ -8,7 +8,8 @@
 #ifndef GENERATOR_H
 #define	GENERATOR_H
 #include "LR1.h"
-
+#include <vector>
+#include <fstream>
 using namespace std;
 
 class Word {
@@ -22,6 +23,11 @@ public:
     Word(string t, string tx)
     : type(t), x(tx) {
     }
+
+    bool operator<(const Word& a) const {
+        if (x != a.x) return x < a.x;
+        return type < a.type;
+    }
 };
 
 class Generator {
@@ -29,16 +35,26 @@ public:
     void init_lr1();
     void read();
     bool reduce();
-    void do_reduce(pair<string, vector<string> >& prod);
+    void do_reduce(pair<string, vector<string> >& prod, int id);
     Generator();
     Generator(const Generator& orig);
     virtual ~Generator();
 private:
     vector<Word> src;
     LR1 lr1;
-    string stk[10000];
-    int stat[10000];
+    Word stk[1000];
+    int stat[1000];
     int top;
+
+
+    string cur_types;
+    vector<pair<string, string> > decs;
+    string exp;
+    vector<string> vlist;
+    vector<Word> exp_vec;
+
+    ofstream section_data;
+    ofstream section_text;
 };
 
 #endif	/* GENERATOR_H */

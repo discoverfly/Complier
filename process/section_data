@@ -1,0 +1,15 @@
+.section .data
+score:
+	.int 62, 79, 86, 90, 82, 76
+credit:
+	.int 3, 2, 2, 1, 2, 2
+stu_number:
+	.int 0
+sum:
+	.float 0
+mean:
+	.float 0
+temp:
+	.int 0
+i:
+	.int 0

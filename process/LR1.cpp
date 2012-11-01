@@ -81,7 +81,6 @@ vector<string> LR1::firsts(vector<string>& vec) {
 }
 
 set<LR1_State> LR1::closure(set<LR1_State> & I) {
-
     bool changed = false;
     do {
         changed = false;
@@ -301,7 +300,6 @@ void LR1::read() {
     freopen("syntax", "r", stdin);
     char buf[1000];
     while (gets(buf) != NULL) {
-        //cout << str << endl;
         this->add_p(string(buf));
     }
     fclose(stdin);
