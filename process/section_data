@@ -1,8 +1,8 @@
 .section .data
 score:
-	.int 62, 79, 86, 90, 82, 76
+	.int , , , , , 
 credit:
-	.int 3, 2, 2, 1, 2, 2
+	.int , , , , , 
 stu_number:
 	.int 0
 sum:

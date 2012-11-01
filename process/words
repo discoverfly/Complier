@@ -118,13 +118,13 @@
         ID :  mean
          = :  =
         ID :  sum
+         / :  /
         ID :  temp
          # :  ;
         if :  if
          ( :  (
         ID :  mean
-         > :  >
-         = :  =
+        >= :  >=
      DIGIT :  60
          ) :  )
          { :  {

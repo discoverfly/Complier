@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <sstream>
 #include <string>
+#include <cstring>
 
 void Generator::read() {
     freopen("words", "r", stdin);
@@ -38,6 +39,7 @@ void Generator::init_lr1() {
 }
 
 bool Generator::reduce() {
+    memset(is_busy, 0, sizeof (is_busy));
     top = -1;
     stat[++top] = 1;
     pair<string, int> nxt;
@@ -45,46 +47,51 @@ bool Generator::reduce() {
     string add;
     int id;
     pair<string, vector<string> > prod;
-    bool dec;
-    for (vector<Word>::iterator it = src.begin(); it != src.end(); ++it) {
+    vector<Word>::iterator it = src.begin();
+    while (it != src.end()) {
         add = it->type;
         cur = stat[top];
-        dec = false;
 
-        while (true) {
-            nxt = lr1.next_action(cur, add);
-            if (nxt.second == -1) {
-                break;
-            }
-            // cout << add << " :  ";
-            if (nxt.first == "r") {
-                id = nxt.second;
-                prod = lr1.get_p_by_id(id);
-                do_reduce(prod, id + 1);
-                cur = stat[top];
-                add = prod.first;
-                if (dec == false) {
-                    dec = true;
-                    --it;
-                }
-            } else if (nxt.first == "AC") {
-                cout << top << endl;
-                return true;
-            } else {
-                stk[top] = *it;
-                stat[++top] = nxt.second;
-                break;
-            }
-            // for (int i = 0; i < top; ++i) cout << stat[i] << " " << stk[i] << " ";
-            // cout << stat[top];
-            // cout << endl;
+        nxt = lr1.next_action(cur, add);
+        if (nxt.second == -1) {
+            cout << "Error in reduce" << endl;
+            break;
         }
+        cout << add << " :  ";
+        if (nxt.first == "r") {
+            id = nxt.second;
+            prod = lr1.get_p_by_id(id);
+            string infor = do_reduce(prod, id + 1);
+            stk[top] = Word(prod.first, infor);
+            cur = stat[top];
+            stat[++top] = lr1.next_action(cur, prod.first).second;
+        } else if (nxt.first == "AC") {
+            cout << top << endl;
+            return true;
+        } else {
+            stk[top] = *it;
+            stat[++top] = nxt.second;
+            ++it;
+        }
+        for (int i = 0; i < top; ++i) cout << " " <<stat[i] <<" " << stk[i].type << " ";
+        cout << stat[top];
+        cout << endl;
     }
 
     return false;
 }
 
-void Generator::do_reduce(pair<string, vector<string> >& prod, int id) {
+int Generator::get_reg() {
+    for (int i = 0; i < 4; ++i) {
+        if (!is_busy[i]) return i;
+    }
+    return -1;
+}
+
+string Generator::do_reduce(pair<string, vector<string> >& prod, int id) {
+    int t;
+    string reg;
+    string res = "";
     switch (id) {
         case 1:break;
         case 2:break;
@@ -114,29 +121,36 @@ void Generator::do_reduce(pair<string, vector<string> >& prod, int id) {
             break;
         case 19:break;
         case 20:
-            section_data << stk[top - 5].x << ":\n\t" << "." << cur_types <<" ";
+            section_data << stk[top - 5].x << ":\n\t" << "." << cur_types << " ";
             for (int i = 0; i < vlist.size(); ++i) {
-                if (i)  section_data << ", ";
-                section_data <<vlist[i];
+                if (i) section_data << ", ";
+                section_data << vlist[i];
             }
-            section_data<<"\n";
+            section_data << "\n";
             vlist.clear();
             break;
         case 21:break;
         case 22: // EQ -> = VALUE
             break;
         case 23:break;
-        case 24:
+        case 24: //VLIST ->  VALUE
+            cout << stk[top - 1].x << endl;
             vlist.push_back(stk[top - 1].x);
             break;
-        case 25:
+        case 25: //VLIST ->  VALUE , VLIST 
+            cout << stk[top - 3].x << endl;
             vlist.push_back(stk[top - 3].x);
             break;
-        case 26:break;
-        case 27:break;
+        case 26: //VALUE -> DIGIT
+            cout << stk[top - 1].x << endl;
+            break;
+        case 27: //VALUE -> REAL
+            break;
         case 28:break;
-        case 29:break;
-        case 30:break;
+        case 29:
+            break;
+        case 30:
+            break;
         case 31:break;
         case 32: // TYPE -> int
             cur_types = "int";
@@ -145,7 +159,9 @@ void Generator::do_reduce(pair<string, vector<string> >& prod, int id) {
             cur_types = "float";
             break;
         case 34:break;
-        case 35:break;
+        case 35:
+            memset(is_busy, 0, sizeof (is_busy));
+            break;
         case 36:break;
         case 37:break;
         case 38:break;
@@ -167,6 +183,7 @@ void Generator::do_reduce(pair<string, vector<string> >& prod, int id) {
     section_data.flush();
     section_text.flush();
     top = top - prod.second.size();
+    return res;
 }
 
 Generator::Generator() {
@@ -177,7 +194,7 @@ Generator::Generator() {
     if (!section_text.is_open()) cerr << "open section_text error" << endl;
     section_data << ".section .data\n";
     section_text << ".section .text\n";
-    section_text <<".globl _start\n" <<"_start:\n";
+    section_text << ".globl _start\n" << "_start:\n";
     section_data.flush();
     section_text.flush();
 }

@@ -35,10 +35,11 @@ public:
     void init_lr1();
     void read();
     bool reduce();
-    void do_reduce(pair<string, vector<string> >& prod, int id);
+    string do_reduce(pair<string, vector<string> >& prod, int id);
     Generator();
     Generator(const Generator& orig);
     virtual ~Generator();
+    int get_reg();
 private:
     vector<Word> src;
     LR1 lr1;
@@ -52,6 +53,7 @@ private:
     string exp;
     vector<string> vlist;
     vector<Word> exp_vec;
+    bool is_busy[4];
 
     ofstream section_data;
     ofstream section_text;
