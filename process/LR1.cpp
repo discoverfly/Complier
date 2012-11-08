@@ -66,14 +66,11 @@ void LR1::get_first() {
 
 vector<string> LR1::firsts(vector<string>& vec) {
     vector<string> res;
-    bool can_null = true;
     for (int i = 0; i < vec.size(); ++i) {
         for (set<string>::iterator it = first[vec[i]].begin(); it != first[vec[i]].end(); ++it) {
             res.push_back(*it);
         }
-
         if (!nullable(vec[i])) {
-            can_null = false;
             break;
         }
     }

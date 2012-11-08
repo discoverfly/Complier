@@ -13,8 +13,9 @@ int main(int argc, char** argv) {
     Generator* gen = new Generator();
     gen->init_lr1();
     gen->read();
-    if(gen->reduce()) puts("AC");
+    if (gen->reduce()) puts("AC");
     else puts("Error");
+    gen->copy();
     return 0;
 }
 

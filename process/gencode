@@ -1,3 +1,50 @@
+.section .data
+score:
+	.int 76, 82, 90, 86, 79, 62
+credit:
+	.int 2, 2, 1, 2, 2, 3
+stu_number:
+	.int 0
+sum:
+	.float 0
+mean:
+	.float 0
+temp:
+	.int 0
+i:
+	.int 0
+tmp_value_a:
+	 .string	"please input your student number:"
+tmp_value_b:
+	 .string	"%d"
+tmp_value_c:
+	.float 0
+tmp_value_d:
+	.int	0
+tmp_value_e:
+	.int	0
+tmp_value_f:
+	.int 0
+tmp_value_g:
+	.float 0
+tmp_value_h:
+	.int	0
+tmp_value_i:
+	.int 0
+tmp_value_j:
+	.float 0
+tmp_value_k:
+	.float 60
+tmp_value_l:
+	.float 0
+tmp_value_m:
+	 .string	"the score of student number %d is %f higher than 60.\n"
+tmp_value_n:
+	.float 60
+tmp_value_o:
+	.float 0
+tmp_value_p:
+	 .string	"the score of student number %d is %f lower than 60.\n"
 .section .text
 .def    _printf;    .scl	2;	.type	32;	.endef
 .def    _scanf;	.scl	2;	.type	32;	.endef

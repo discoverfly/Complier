@@ -11,7 +11,7 @@
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles" displayName="资源文件" projectFiles="true">
-      <itemPath>gencode.s</itemPath>
+      <itemPath>gencode</itemPath>
       <itemPath>section_data</itemPath>
       <itemPath>section_text</itemPath>
       <itemPath>syntax</itemPath>

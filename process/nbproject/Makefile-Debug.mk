@@ -36,7 +36,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Generator.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/gencode.o \
 	${OBJECTDIR}/LR1.o
 
 
@@ -73,10 +72,6 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/gencode.o: gencode.s 
-	${MKDIR} -p ${OBJECTDIR}
-	$(AS) $(ASFLAGS) -g -o ${OBJECTDIR}/gencode.o gencode.s
 
 ${OBJECTDIR}/LR1.o: LR1.cpp 
 	${MKDIR} -p ${OBJECTDIR}
